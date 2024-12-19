@@ -1,0 +1,110 @@
+<Pages>:
+    BoxLayout:
+        id: root_vertical_box
+        orientation: "vertical"
+        size: root.size
+        BoxLayout:
+            id: Spinner_current_day_month
+            size_hint: 1, .1
+            BoxLayout:
+                id: boxlayout_day
+                size_hint: 1, 1
+                Spinner:
+                    id: spinner_day
+                    size_hint: 1, 1
+                    pos_hint: {"top":1}
+                    font_size: 50
+#                    text: root.day_spinner_str
+#                    values: map(str,list(range(1,root.quantity_day_property)))
+#                    on_text: root.create_a_date_for_label_and_key_for_dict(self)
+            BoxLayout:
+                id: month
+                size_hint: 1, 1
+                Spinner:
+                    id: boxlayout_month
+                    pos_hint: {"left":1,"top":1}
+                    size_hint: 1, 1
+                    font_size: 40
+#                    text: root.month_spinner_str
+#                    values: root.spinner_month_lst
+#                    on_text: root.create_a_date_for_label_and_key_for_dict(self)
+        BoxLayout:
+            id: Label_day_month
+            size_hint: 1, .1
+            Label:
+                #text: "На дату:\n"+' '.join(root.label_month_lst)
+                text: "На дату {ДАТА}"
+                font_size: 50
+
+
+
+
+
+
+
+
+        BoxLayout:
+            id: Textinput_amount
+            size_hint: 1, .1
+            BoxLayout:
+                BoxLayout:
+                    orientation: "vertical"
+                    BoxLayout:
+                        id: quantity_rubel
+                        padding: 30
+                        size_hint: 1,.7
+                        TextInput:
+                            size_hint: 1,1
+                            font_size: 55
+                            text: "0"
+                            multiline: False
+                        Label:
+                            text: "РУБ"
+                            size_hint: 1,1
+                            font_size: 50
+                            bold: True
+                    Label:
+                        size_hint: 1,.3
+                        text: ""
+            BoxLayout:
+                BoxLayout:
+                    orientation: "vertical"
+                    BoxLayout:
+                        id: quantity_kopeyka
+                        padding: 30
+                        size_hint: 1,.7
+                        TextInput:
+                            size_hint: 1,1
+                            font_size: 55
+                            text: "0"
+                            multiline: False
+                        Label:
+                            text: "КОП"
+                            size_hint: 1,1
+                            font_size: 50
+                            bold: True
+                    Label:
+                        size_hint: 1,.3
+                        text: ""
+
+
+
+
+
+
+
+
+
+        BoxLayout:
+            id: Textinput_comments
+            size_hint: 1, .1
+        BoxLayout:
+            id: Button_action
+            size_hint: 1, .1
+
+
+
+
+
+
+
