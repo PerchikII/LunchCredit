@@ -1,4 +1,8 @@
 <Pages>:
+    day_day_spinner: spinner_day
+    month_month_spinner: spinner_month
+    rubel_money: quantity_rubel
+    kopeyka_money: quantity_kopeyka
     BoxLayout:
         id: root_vertical_box
         orientation: "vertical"
@@ -7,30 +11,33 @@
             id: Spinner_current_day_month
             size_hint: 1, .25
             BoxLayout:
-                id: boxlayout_day
                 spacing: 10
                 padding: 10
                 Spinner:
                     id: spinner_day
                     size_hint: .1, 1
                     font_size: 40
-                    text: root.day_spinner
-#                    values: map(str,list(range(1,root.quantity_day_property)))
-#                    on_text: root.create_a_date_for_label_and_key_for_dict(self)
+                    text: root.day_spinner_str
+                    values: map(str,list(range(1,root.quantity_day_property)))
+                    on_text: root.create_date_in_label_amount(self.text)
+
                 Spinner:
                     id: spinner_month
                     pos_hint: {"left":1,"top":1}
                     size_hint: .4, 1
                     font_size: 40
                     text: root.month_spinner
-#                    values: root.spinner_month_lst
-#                    on_text: root.create_a_date_for_label_and_key_for_dict(self)
+                    values: root.all_month_list
+                    on_text: root.install_date_spinner_day(self.text)
+                    on_text: root.create_key_for_dict()
+                    on_text: root.create_date_in_label_amount(self.text)
         BoxLayout:
             size_hint: 1, .2
             Label:
                 id: Label_amount_date
                 #text: "На дату:\n"+' '.join(root.label_month_lst)
-                text: "На дату {ДАТА} уже есть сумма: {СУММА}"
+                markup: True
+                text: f"На дату  [b]{' '.join(root.label_month_lst)}[/b] сумма: [b]{root.input_rubel}[/b]руб [b]{root.input_kopeyka}[/b]коп"
                 font_size: 30
                 color: 0,0,0
         BoxLayout:
@@ -39,17 +46,19 @@
             BoxLayout:
                 BoxLayout:
                     orientation: "vertical"
-                    #pos_hint: {"y":"center"}
                     BoxLayout:
-                        id: quantity_rubel
                         padding: 30
                         size_hint: 1,.5
-                        TextInpMoney:
+                        TextInpMoneyRub:
+                            id: quantity_rubel
                             size_hint: .5,1
                             font_size: 60
-                            text: "1234"
+                            text: root.input_rubel
                             text_size: self.size
                             multiline: False
+                            #on_text: root.check_len_text(self.text)
+                            on_focus: root.focus_textinput(self,args[1],self.text)
+
                         Label:
                             text: "РУБ"
                             size_hint: .5,1
@@ -63,14 +72,16 @@
                 BoxLayout:
                     orientation: "vertical"
                     BoxLayout:
-                        id: quantity_kopeyka
+
                         padding: 30
                         size_hint: 1,.5
-                        TextInpMoney:
+                        TextInpMoneyKop:
+                            id: quantity_kopeyka
                             size_hint: .3, 1
                             font_size: 60
-                            text: "99"
+                            text: root.input_kopeyka
                             multiline: False
+                            on_focus: root.focus_textinput(self,args[1],self.text)
                         Label:
                             text: "КОП"
                             size_hint: 1, 1
@@ -93,8 +104,8 @@
                 id: Comments
                 size_hint: 1,1
                 font_size: 50
-                hint_text: f"\n{(5*'\t')}комментарий"
-                text: "Чай,сахар,булка"
+                hint_text: f"\n{(5*'\t')}Чай,сахар,булка"
+
 
         BoxLayout:
             size_hint:1,.1
