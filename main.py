@@ -7,6 +7,7 @@ import pickle
 
 from kivy.app import App
 from kivy.clock import Clock
+from kivy.tools.pep8checker.pep8 import get_parser
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
@@ -18,6 +19,8 @@ from kivy.properties import ListProperty, StringProperty, NumericProperty,Object
 from kivy.core.window import Window
 
 from kivy.lang.builder import Builder
+from pygments.styles.dracula import comment
+
 """Установить kv файл в директорию совместно в main.py"""
 dir_name = os.path.split(os.path.abspath(__file__))
 Builder.load_file(os.path.join(dir_name[0], "main_kv.kv"))
@@ -85,87 +88,107 @@ class Pages(Carousel):
 
     def main(self):
         self.file_dict = self.load_or_create_file_dict()
-        self.update_statistic()
-
-    def work_spinner_day_month(self):
-        print("work_spinner_day_month")
-        self.update_statistic()
-
-
-    def update_statistic(self):
-        print("update_statistic")
         key = self.get_key_for_dict()
+        self.update_statistic(key)
+
+    def update_statistic(self,key:str):
+        print(key,"95 Мартобря")
         if key in self.file_dict:
-            self.install_date_in_label_amount(key)
+            day = self.day_day_spinner.text
+            month = self.month_month_spinner.text
+            rubli = self.get_parser_money(key,rub=True)
+            kopeyki = self.get_parser_money(key,kop=True)
+            comment = self.get_parser_comments(key)
+            data = day,month,rubli,kopeyki,comment
+            self.install_date_in_label_amount(data)
         else:
-            self.install_date_in_label_amount(key_exists=False)
+            print("ключа нет")
+            self.install_date_in_label_amount(data=False)
 
 
-
-
-
-
-
-
-    def install_date_in_label_amount(self,key_exists):
-        print("Устан данных в Label")
-        self.label_month_lst.clear()
-        day = self.day_day_spinner.text
-        month = self.month_month_spinner.text
-        self.label_month_lst.append(day)
-        self.label_month_lst.append(month)
-        if key_exists:
-            rub = self.get_parser_money(self.file_dict[key_exists], rub=True)
-            kopeyka = self.get_parser_money(self.file_dict[key_exists], kop=True)
-            comment = self.get_parser_comments(self.file_dict[key_exists])
+    def install_date_in_label_amount(self, data):
+        if data:
+            self.label_month_lst.clear()
+            day = data[0]
+            month = data[1]
+            self.label_month_lst.append(day)
+            self.label_month_lst.append(month)
+            rub = data[2]
+            kopeyka = data[3]
+            comment = data[4]
             self.input_rubel_for_label = rub
             self.input_kopeyka_for_label = kopeyka
             self.comment_comment.text = comment
         else:
+            self.label_month_lst.clear()
+            self.label_month_lst.append('0')
+            self.label_month_lst.append('0')
             self.input_rubel_for_label = "0"
             self.input_kopeyka_for_label = "0"
             self.comment_comment.text = ""
 
-    def get_parser_money(self, value:tuple, rub=False, kop=False):
+    def get_parser_money(self, key_dict, rub=False, kop=False) ->str:
+        val_for_parsing = self.file_dict[key_dict]
         if rub:
-            rubel = value[0].split(".")[0]
+            rubel = val_for_parsing[0].split(".")[0]
             return rubel
         if kop:
-            kopeyka = value[0].split(".")[1]
+            kopeyka = val_for_parsing[0].split(".")[1]
             return kopeyka
-
-    def get_parser_comments(self,value):
-        comments = value[1]
+    def get_parser_comments(self,key):
+        comments = self.file_dict[key][1]
         return comments.capitalize()
+
+    def work_spinner_day_month(self):
+        key = self.get_key_for_dict()
+        self.input_rubel = "0"
+        self.input_kopeyka = "0"
+        self.update_statistic(key)
+
 
 
     def save_changes(self):
         key = self.get_key_for_dict()
-        print(key)
         if key not in self.file_dict: # проверка ключа на вхождение в словарь
             # Сбор данных для сохранения
-            self.VALUE_DICT = self.create_value_for_dict()
-            self.file_dict[self.KEY_DICT] = self.VALUE_DICT
+            if self.rubel_money.text == "":
+                self.rubel_money.text = "0"
+            elif self.kopeyka_money.text == "":
+                self.kopeyka_money.text = "0"
+            comment = self.comment_comment.text
+            value = self.create_value_for_dict(self.rubel_money.text,self.kopeyka_money.text,comment)
+            self.file_dict[key] = value
             self.write_file_time_work()
         else:
             self.my_popup_rewrite_add()
+
+    def create_value_for_dict(self,rub,kop,comm):
+        value = rub + "." + kop, comm
+        return value
 
 
 
 
     def add_amount(self):
-        saved_amound_rub = int(self.file_dict[self.KEY_DICT].split(".")[0])*100
-        saved_amound_kops = int(self.file_dict[self.KEY_DICT].split(".")[1])
-        total_save_amound_in_kop = saved_amound_rub + saved_amound_kops
+        old_amount_rub = int(self.get_parser_money(self.file_dict[self.KEY_DICT],rub=True))*100
+        old_amount_kops = int(self.get_parser_money(self.file_dict[self.KEY_DICT],kop=True))
+        total_save_amount_in_kop = old_amount_rub + old_amount_kops
+
 
         current_amount_rub = int(self.rubel_money.text)*100
         current_amount_kops = int(self.kopeyka_money.text)
-        total_currents_amound_in_kop = current_amount_rub + current_amount_kops
+        total_currents_amount_in_kop = current_amount_rub + current_amount_kops
 
-        total_summ_value_in_dict = (total_save_amound_in_kop + total_currents_amound_in_kop)/100
-        self.VALUE_DICT = str(total_summ_value_in_dict)
-        self.file_dict[self.KEY_DICT] = self.VALUE_DICT
-        self.write_file_time_work()
+        total_summ_value_in_dict = (total_save_amount_in_kop + total_currents_amount_in_kop)/100
+
+        rub = self.get_parser_money(str(total_summ_value_in_dict),rub=True)
+        kop = self.get_parser_money(str(total_summ_value_in_dict),kop=True)
+        # создать новый ключ:значение и отправить на upgrade()
+
+        print(rub,kop)
+
+        print("New summ value",str(total_summ_value_in_dict))
+        print("Куда-то надо отправить")
 
 
 
@@ -233,18 +256,17 @@ class Pages(Carousel):
         self.KEY_DICT = key
         return key
 
-    def create_value_for_dict(self):
-        if self.rubel_money.text == "":
-            self.rubel_money.text = "0"
-        elif self.kopeyka_money.text == "":
-            self.kopeyka_money.text = "0"
-        self.COMMENT_DICT = self.comment_comment.text
-        value = self.rubel_money.text + "." + self.kopeyka_money.text, self.COMMENT_DICT
-        return value
+
 
     def overwriting_values(self):
-        self.VALUE_DICT = self.create_value_for_dict()
-        self.file_dict[self.KEY_DICT] = self.VALUE_DICT
+        rub = self.rubel_money.text
+        kop = self.kopeyka_money.text
+        comment = self.comment_comment.text
+
+        key = self.get_key_for_dict()
+        value = self.create_value_for_dict(rub,kop,comment)
+
+        self.file_dict[key] = value
         self.write_file_time_work()
         print(self.file_dict,"Старый ключ с новым значением")
 
@@ -270,7 +292,8 @@ class Pages(Carousel):
             pickle.dump(self.file_dict, obj)
         Clock.schedule_once(self.my_callback, 2)
         self.label_save_txt = "Сохранено"
-        self.update_statistic()
+        key = self.get_key_for_dict()
+        self.update_statistic(key)
         print(self.file_dict)
 
     def install_date_spinner_day(self,choice_month:str):
