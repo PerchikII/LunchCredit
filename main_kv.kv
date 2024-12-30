@@ -95,6 +95,9 @@
             Button:
                 text: "Посмотреть статистику"
                 font_size: 40
+                on_press: root.load_slide(root.next_slide)
+                on_press: root.create_label_statistic_two_page()
+
         BoxLayout:
             size_hint:1,.3
             padding: [10,0,10,0]
@@ -110,7 +113,7 @@
             Label:
                 text: root.label_save_txt
                 font_size: 40
-                color: 1,0,0
+                color: "#0B0080"
                 bold: True
         BoxLayout:
             size_hint:1,.3
@@ -133,8 +136,44 @@
             Label:
                 markup: True
                 text: 'автор: Погодаев Илья Сергеевич [color=#0B0080][b] [ref=post]ilya1880@mail.ru[/ref][/b][/color]'
-
                 color: 0,0,0
+<Pages>:
+    two_pages: box_two_pages
+    scroll_two_pages: scrll
+    ScrollView:
+        id: scrll
+        canvas.before:
+            Color:
+                rgb: (.5,0,0)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        #effect_cls:ScrollEffect()
+        do_scroll_x: False
+        do_scroll_y: True
+        size_hint: .5,1
+        padding: 10
+
+        BoxLayout:
+            id: box_two_pages
+            orientation: "vertical"
+            padding: 10
+            spacing: 5
+            size_hint_y: None
+            #height: self.texture_size[1]
+            #text_size: self.width, None
+
+
+#        canvas:
+#            Color:
+#                rgb: (0/255,0/255,255/255)
+#            Rectangle:
+#                pos: self.pos
+#                size: self.size
+#        Label:
+#            text: "Привет"
+
+
 
 
 
