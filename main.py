@@ -131,8 +131,8 @@ class Pages(Carousel):
             box_two_page = BoxLayout(orientation="vertical", size_hint_y=None)
             box_two_page.bind(minimum_height=box_two_page.setter('height'))
             for date in lst_dates:
-                box_data = BoxLayout(size_hint=(1,.1),size_hint_y=None,height=50,spacing=10)
-                lab_data = Label(text=f"{date}",size_hint=(.2,1),font_size=FONT,bold=True,color=(0,0,0))
+                box_data = BoxLayout(size_hint=(1,1),size_hint_y=None,height=50,spacing=10)
+                lab_data = Label(text=f"{date}",size_hint=(.3,1),font_size=FONT,bold=True,color=(0,0,0))
                 rub = self.get_parser_money(date,rub=True)
                 kop = self.get_parser_money(date,kop=True)
                 comment = self.get_parser_comments(date)
@@ -140,9 +140,9 @@ class Pages(Carousel):
                     comment = 'No comments'
                 else:
                     comment = comment.split()[0][:10]+"...."
-                lab_money = Label(text=f"{rub}руб {kop}коп",size_hint=(.2,1),font_size=FONT,bold=True,color=(0,0,0))
+                lab_money = Label(text=f"{rub}руб {kop}коп",size_hint=(.3,1),font_size=FONT,bold=True,color=(0,0,0))
 
-                lab_comment = Label(text=comment,size_hint=(.6,1),
+                lab_comment = Label(text=comment,size_hint=(.4,1),
                                     font_size=FONT,bold=True,color=(0,0,0))
 
                 box_data.add_widget(lab_data)
