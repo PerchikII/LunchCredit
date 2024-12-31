@@ -9,7 +9,6 @@
         orientation: "vertical"
         size: root.size
         BoxLayout:
-            id: Spinner_current_day_month
             size_hint: 1, .25
             BoxLayout:
                 spacing: 10
@@ -17,7 +16,7 @@
                 Spinner:
                     id: spinner_day
                     size_hint: .1, 1
-                    font_size: 40
+                    font_size: 100
                     text: root.day_spinner_str
                     values: map(str,list(range(1,root.quantity_day_property)))
                     on_text: root.work_spinner_day_month()
@@ -26,7 +25,7 @@
                     id: spinner_month
                     pos_hint: {"left":1,"top":1}
                     size_hint: .4, 1
-                    font_size: 40
+                    font_size: 100
                     text: root.month_spinner
                     values: root.all_month_list
                     #on_text: root.install_date_spinner_day(self.text)
@@ -36,11 +35,15 @@
             Label:
                 id: Label_amount_date
                 markup: True
-                text: f"На дату  [b]{' '.join(root.label_month_lst)}[/b] сумма: [b]{root.input_rubel_for_label}[/b]руб [b]{root.input_kopeyka_for_label}[/b]коп"
-                font_size: 30
+                font_size: 47
+                text_size: self.size
+                halign: "center"
+                valign: "center"
+                text:
+                    f"На дату  [b]{' '.join(root.label_month_lst)}[/b] сумма:[color=#ed0d0d][b]{root.input_rubel_for_label}[/b][/color] руб [b][color=#ed0d0d]{root.input_kopeyka_for_label}[/b][/color]коп"
                 color: 0,0,0
         BoxLayout:
-            size_hint: 1, .4
+            size_hint: 1, .3
             BoxLayout:
                 BoxLayout:
                     orientation: "vertical"
@@ -49,8 +52,8 @@
                         size_hint: 1,.5
                         TextInpMoneyRub:
                             id: quantity_rubel
-                            size_hint: .5,1
-                            font_size: 60
+                            size_hint: .44,1
+                            font_size: 100
                             text: root.input_rubel
                             text_size: self.size
                             multiline: False
@@ -63,8 +66,8 @@
                             bold: True
                             color: 0,0,0
                     Label:
-                        size_hint: 1,.2
-                        text: ""
+                        size_hint: 1,.22
+
             BoxLayout:
                 BoxLayout:
                     orientation: "vertical"
@@ -73,8 +76,8 @@
                         size_hint: 1,.5
                         TextInpMoneyKop:
                             id: quantity_kopeyka
-                            size_hint: .3, 1
-                            font_size: 60
+                            size_hint: .4, 1
+                            font_size: 100
                             text: root.input_kopeyka
                             multiline: False
                             on_focus: root.focus_textinput(self,args[1],self.text)
@@ -85,14 +88,17 @@
                             bold: True
                             color: 0,0,0
                     Label:
-                        size_hint: 1,.2
-                        text: ""
+                        size_hint: 1,.22
+
         BoxLayout:
             size_hint: 1,.3
             padding: 10
             Button:
                 text: "Посмотреть статистику\n  за выбранный месяц"
-                font_size: 40
+                font_size: 70
+                text_size: self.size
+                halign: "center"
+                valign: "center"
                 on_press: root.load_slide(root.next_slide)
 
 
@@ -120,21 +126,24 @@
             spacing: 10
             Button:
                 text: "Сохранить"
-                font_size: 50
+                font_size: 70
                 color: 0,0,0
                 on_press: root.save_changes()
             Button:
                 text: "Выход"
-                font_size: 50
+                font_size: 90
                 color: 0,0,0
                 on_release: app.quit_program()
         BoxLayout:
-            size_hint: 1,.03
+            size_hint: 1,.1
             padding:[0,10,0,10]
             Label:
                 markup: True
                 text: 'автор: Погодаев Илья Сергеевич [color=#0B0080][b] [ref=post]ilya1880@mail.ru[/ref][/b][/color]'
+                text_size: self.size
+                halign: "center"
                 color: 0,0,0
+
 <Pages>:
     scroll_two_page: scrll
     label_total_amount_two_page:label_total
@@ -154,13 +163,20 @@
             #effect_cls:ScrollEffect()
             do_scroll_x: False
             do_scroll_y: True
-            size_hint: 1,.9
+            size_hint: 1,1
         Label:
             id: label_total
             size_hint: 1,.1
             text: "Итог за 'месяц' {сумма}"
             color: 0,0,0
             font_size: 30
+        Label:
+            markup: True
+            text: 'автор: Погодаев Илья Сергеевич [color=#0B0080][b] [ref=post]ilya1880@mail.ru[/ref][/b][/color]'
+            text_size: self.size
+            halign: "center"
+            size_hint: 1,.05
+            color: 0,0,0
 
 
 
