@@ -131,7 +131,7 @@ class Pages(Carousel):
             box_two_page = BoxLayout(orientation="vertical", size_hint_y=None)
             box_two_page.bind(minimum_height=box_two_page.setter('height'))
             for date in lst_dates:
-                box_data = BoxLayout(size_hint=(1,1),size_hint_y=None,height=50,spacing=10)
+                box_data = BoxLayout(size_hint=(1,1),size_hint_y=None,height=50,spacing=30)
                 lab_data = Label(text=f"{date}",size_hint=(.3,1),font_size=FONT,bold=True,color=(0,0,0))
                 rub = self.get_parser_money(date,rub=True)
                 kop = self.get_parser_money(date,kop=True)
