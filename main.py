@@ -55,8 +55,9 @@ class TextInpMoneyKop(TextInput):
             return super().insert_text(enter_symbol, from_undo=from_undo)
 
 class Pages(Carousel):
-    two_pages = ObjectProperty()
-    scroll_two_pages = ObjectProperty()
+
+    scroll_two_page = ObjectProperty()
+    label_total_amount_two_page = ObjectProperty()
 
     day_day_spinner = ObjectProperty()
     month_month_spinner = ObjectProperty()
@@ -77,79 +78,78 @@ class Pages(Carousel):
     input_kopeyka_for_label = StringProperty("")
 
     label_month_lst = ListProperty([CURRENT_DAY, CURRENT_MONTH])  # Устан.даты в Label_amount
-    # label_amount_for_day = StringProperty()
+
 
     def __init__(self, **kwargs):
         super(Pages, self).__init__(**kwargs)
-        self.loop = True  # Бесконечная прокрутка
-
+        # self.loop = True  # Бесконечная прокрутка
         # self.load_slide(self.next_slide)  ##################### следущий Pages
-
-        # self.KEY_DICT = ""
-        # self.VALUE_DICT = ""
-        # self.COMMENT_DICT = ""
         self.file_dict = {}
         self.main()
 
     def main(self):
         self.file_dict = self.load_or_create_file_dict()
-        key = self.get_key_for_dict()
-        self.update_statistic(key)
+        date_key = self.get_key_for_dict()
+        self.update_statistic(date_key)
+        self.create_label_statistic_two_page(date_key)
+###############################################################
+    def __Update_statistic(self, choice_month: str = CURRENT_MONTH):
+        lst_dates_current_month = self.get_dates_from_current_month(choice_month)  # Список дат с нужным месяцем
+        lst_sorted_num_current_month = self.get_num_days(lst_dates_current_month)  # Список чисел нужного месяца
+        lst_keys_dates = self.create_keys_date_choice_month(lst_sorted_num_current_month)  # Список ["10 Октябрь"]
+        time_statistic = self.update_total_time_statistic(lst_keys_dates)  # Кортеж (170,45) часы минуты
+        lst_all_month = self.get_set_all_month()
+
+        self.install_statistic(lst_sorted_num_current_month, lst_all_month, time_statistic, choice_month)
+    def get_dates_from_current_month(self, choice_month):
+        list_month = []  # Только даты выбранного месяца
+        for i in self.file_dict:  # Получаем в i ключи словаря
+            if i.split()[1] == choice_month:  # Определяем нужный месяц из списка. Вычленяем название месяца
+                list_month.append(i)  # Записываем в список только даты с нужным месяцем
+        return list_month
+    def get_num_days(self, lst_current_month: list):
+        lst_num_days = []
+        for i in lst_current_month:  # Идём по списку месяца
+            num_day = int(i.split()[0])  # Вычленяя только число месяца оборачивая в int()
+            lst_num_days.append(num_day)  # Только числа: int выбранного месяца
+        lst_num_days.sort()
+        return lst_num_days
+    def create_keys_date_choice_month(self, sorted_num_current_days: list, month_choice: str = CURRENT_MONTH):
+        keys_all_work = []
+        for i in range(len(sorted_num_current_days)):  # Проход по длинне списка дат
+            keys_all_work.append(
+                str(sorted_num_current_days[i]) + " " + month_choice)  # создание строки ключа словаря и запись в список
+        return keys_all_work
+###############################################################
+    def create_label_statistic_two_page(self,choice_month:str):
+        lst_dates_current_month = self.get_dates_from_current_month(choice_month)
 
 
 
+        FONT = 22
+        box_two_page = BoxLayout(orientation="vertical", size_hint_y=None)
+        box_two_page.bind(minimum_height=box_two_page.setter('height'))
+        for i in range(1,31):
+            box_data = BoxLayout(size_hint=(1,.1),size_hint_y=None,height=50,spacing=10)
 
+            lab_data = Label(text=f"{i} Декабря",size_hint=(.2,1),font_size=FONT,bold=True,color=(0,0,0))
+            lab_money = Label(text=f"{i+1000}руб {i+100}коп",size_hint=(.2,1),font_size=FONT,bold=True,color=(0,0,0))
+            lab_comment = Label(text=f"Чай,вода,булочка,пивас,ганджубас",size_hint=(.4,1),
+                                font_size=FONT,bold=True,color=(0,0,0))
 
-
-
-
-
-
-
-    def create_label_statistic_two_page(self):
-        self.two_pages.bind(minimum_height=self.two_pages.setter('height'))
-
-        for i in range(1,3):
-            box_data = BoxLayout()
-            lab_data = Label(padding=5,text=f"{i+1} Декабря",size_hint_y=None, height=40,
-                         size_hint_x= .5)
-
-            lab_money = Label(padding=5,text=f"{i}руб {i+100}коп",size_hint_y=None, height=40,
-                         size_hint_x= .5)
-
-            lab_comment = Label(padding=5,text=f"Чай,вода,булочка,пивас,ганджубас",size_hint_y=None, height=40,
-                         size_hint_x= .5)
             box_data.add_widget(lab_data)
             box_data.add_widget(lab_money)
             box_data.add_widget(lab_comment)
 
-        self.two_pages.add_widget(box_data)
+            box_two_page.add_widget(box_data)
+        self.scroll_two_page.add_widget(box_two_page)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def clear_all_data(self):
+        self.input_rubel_for_label = "0"
+        self.input_kopeyka_for_label = "0"
+        self.comment_comment.text = ""
 
     def update_statistic(self,key:str):
-        print(key,"95 Мартобря")
         if key in self.file_dict:
             day = self.day_day_spinner.text
             month = self.month_month_spinner.text
@@ -158,7 +158,9 @@ class Pages(Carousel):
             comment = self.get_parser_comments(key)
             data = day,month,rubli,kopeyki,comment
             self.install_date_in_label_amount(data)
+            print("ключ есть")
         else:
+            print("++++++++++")
             print("ключа нет")
             self.install_date_in_label_amount(data=False)
 
@@ -177,12 +179,8 @@ class Pages(Carousel):
             self.input_kopeyka_for_label = kopeyka
             self.comment_comment.text = comment
         else:
-            self.label_month_lst.clear()
-            self.label_month_lst.append('0')
-            self.label_month_lst.append('0')
-            self.input_rubel_for_label = "0"
-            self.input_kopeyka_for_label = "0"
-            self.comment_comment.text = ""
+            self.clear_all_data()
+
 
     def get_parser_money(self, key_dict, rub=False, kop=False) ->str:
         val_for_parsing = self.file_dict[key_dict]
@@ -254,10 +252,11 @@ class Pages(Carousel):
             del self.file_dict[key]
             Clock.schedule_once(self.my_callback, 2)
             self.label_save_txt = "Дата удалена"
+            self.clear_all_data()
         else:
             Clock.schedule_once(self.my_callback, 2)
             self.label_save_txt = "Такой даты не существует"
-
+        self.write_file()
 
 
     def my_popup_rewrite_add(self):
@@ -373,7 +372,7 @@ class Pages(Carousel):
 
 class MyApp(App):
     def build(self):
-        Window.clearcolor = "#40E0D0"
+        Window.clearcolor = "#d7b395"
         obj = Pages()
         return obj
 
