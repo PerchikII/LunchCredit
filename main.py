@@ -92,7 +92,7 @@ class Pages(Carousel):
         date_key = self.get_key_for_dict()
         self.update_statistic_front_page(date_key)
         self.create_label_statistic_two_page()
-###############################################################
+
     def get_dates_from_current_month(self, choice_month):
         list_month = []  # Только даты выбранного месяца
         for i in self.file_dict:  # Получаем в i ключи словаря
@@ -113,9 +113,9 @@ class Pages(Carousel):
         for i in sorted_num_current_days:  # Проход по длинне списка дат
             keys_all_work.append(str(i) + " " + month_choice)  # создание строки ключа словаря и запись в список
         return keys_all_work
-###############################################################
+
     def create_label_statistic_two_page(self):
-        choice_month_key = self.get_key_for_dict().split()[1]
+        choice_month_key = self.get_key_for_dict().split()[1] # Выбранный месяц из ключа
         #print("choice_month_key",choice_month_key)
         lst_dates_current_month = self.get_dates_from_current_month(choice_month_key) # Список дат с нужным месяцем
         #print("lst_dates_current_month",lst_dates_current_month)
@@ -127,11 +127,11 @@ class Pages(Carousel):
 
     def install_statistic_two_page(self,lst_dates):
             self.scroll_two_page.clear_widgets()
-            FONT = 50
-            box_two_page = BoxLayout(orientation="vertical", size_hint_y=None)
-            box_two_page.bind(minimum_height=box_two_page.setter('height'))
+            FONT = 40
+            # box_two_page = BoxLayout(orientation="vertical")
+            # box_two_page.bind(minimum_height=box_two_page.setter('height'))
             for date in lst_dates:
-                box_data = BoxLayout(size_hint=(1,1),size_hint_y=None,height=50,spacing=30)
+                box_data = BoxLayout(size_hint=(1,1),padding=10,spacing=10) # height=50
                 lab_data = Label(text=f"{date}",size_hint=(.3,1),font_size=FONT,bold=True,color=(0,0,0))
                 rub = self.get_parser_money(date,rub=True)
                 kop = self.get_parser_money(date,kop=True)
@@ -149,8 +149,8 @@ class Pages(Carousel):
                 box_data.add_widget(lab_money)
                 box_data.add_widget(lab_comment)
 
-                box_two_page.add_widget(box_data)
-            self.scroll_two_page.add_widget(box_two_page)
+                self.scroll_two_page.add_widget(box_data)
+            #self.scroll_two_page.add_widget(box_two_page)
 
     def clear_all_data(self):
         self.input_rubel_for_label = "0"

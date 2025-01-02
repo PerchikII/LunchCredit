@@ -148,39 +148,43 @@
                 color: 0,0,0
 
 <Pages>:
-    scroll_two_page: scrll
+    scroll_two_page: box_container
     label_total_amount_two_page:label_total
     BoxLayout:
         orientation: "vertical"
-        size_hint: 1,1
         padding: 10
+        size_hint: 1,1
         BoxLayout:
-            size_hint: 1,1
-            padding: 10
-            id: scrll
-            canvas.before:
+            id: box_container
+            orientation: "vertical"
+            size_hint: 1,.9
+            padding: 20
+            canvas:
                 Color:
-                    rgb:  192/255, 214/255, 228/255         # 0/244,0/201,0/193
+                    rgb:  192/255, 214/255, 228/255
                 Rectangle:
                     pos: self.pos
                     size: self.size
-            #effect_cls:ScrollEffect()
-#            do_scroll_x: False
-#            do_scroll_y: True
-            size_hint: 1,1
-        Label:
-            id: label_total
+
+        BoxLayout:
             size_hint: 1,.1
-            text: "Итог за 'месяц' {сумма}"
-            color: 0,0,0
-            font_size: 30
-        Label:
-            markup: True
-            text: 'автор: Погодаев Илья Сергеевич [color=#0B0080][b] [ref=post]ilya1880@mail.ru[/ref][/b][/color]'
-            text_size: self.size
-            halign: "center"
+            Label:
+                id: label_total
+                font_size: 100
+                #size_hint: 1,.1
+                color: 0,0,0
+                text: "Сумма"
+        BoxLayout:
             size_hint: 1,.05
-            color: 0,0,0
+            Label:
+                markup: True
+                text: 'автор: Погодаев Илья Сергеевич [color=#0B0080][b] [ref=post]ilya1880@mail.ru[/ref][/b][/color]'
+                text_size: self.size
+                halign: "center"
+                color: 0,0,0
+
+
+
 
 
 
