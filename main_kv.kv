@@ -149,7 +149,6 @@
 
 <Pages>:
     scroll_two_page: box_container
-    label_total_amount_two_page:label_total
     BoxLayout:
         orientation: "vertical"
         padding: 10
@@ -157,7 +156,7 @@
         BoxLayout:
             id: box_container
             orientation: "vertical"
-            size_hint: 1,.9
+            size_hint: 1,.95
             padding: 20
             canvas:
                 Color:
@@ -167,13 +166,13 @@
                     size: self.size
 
         BoxLayout:
-            size_hint: 1,.1
+            size_hint: 1,.05
             Label:
-                id: label_total
-                font_size: 100
+                markup: True
+                text: f"[b]Сумма за выбранный месяц[/b] [b][size=30]{root.rub_label_total}[/size][/b]руб [size=30]{root.kop_label_total}[/size]коп"
                 #size_hint: 1,.1
                 color: 0,0,0
-                text: "Сумма"
+
         BoxLayout:
             size_hint: 1,.05
             Label:

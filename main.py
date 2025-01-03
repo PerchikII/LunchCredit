@@ -57,7 +57,8 @@ class TextInpMoneyKop(TextInput):
 class Pages(Carousel):
 
     scroll_two_page = ObjectProperty()
-    label_total_amount_two_page = ObjectProperty()
+    rub_label_total = StringProperty()
+    kop_label_total = StringProperty()
 
     day_day_spinner = ObjectProperty()
     month_month_spinner = ObjectProperty()
@@ -128,13 +129,14 @@ class Pages(Carousel):
     def install_statistic_two_page(self,lst_dates):
             self.scroll_two_page.clear_widgets()
             FONT = 40
-            # box_two_page = BoxLayout(orientation="vertical")
-            # box_two_page.bind(minimum_height=box_two_page.setter('height'))
+            total_money = 0
             for date in lst_dates:
                 box_data = BoxLayout(size_hint=(1,1),padding=10,spacing=10) # height=50
                 lab_data = Label(text=f"{date}",size_hint=(.3,1),font_size=FONT,bold=True,color=(0,0,0))
                 rub = self.get_parser_money(date,rub=True)
                 kop = self.get_parser_money(date,kop=True)
+                total_kop = self.get_parser_money(date,tot_kop=True)
+                total_money+=total_kop
                 comment = self.get_parser_comments(date)
                 if comment == "":
                     comment = 'No comments'
@@ -144,13 +146,15 @@ class Pages(Carousel):
 
                 lab_comment = Label(text=comment,size_hint=(.4,1),
                                     font_size=FONT,bold=True,color=(0,0,0))
-
                 box_data.add_widget(lab_data)
                 box_data.add_widget(lab_money)
                 box_data.add_widget(lab_comment)
 
                 self.scroll_two_page.add_widget(box_data)
-            #self.scroll_two_page.add_widget(box_two_page)
+            label_total_amount = str(total_money/100).split(".")
+            self.rub_label_total = label_total_amount[0]
+            self.kop_label_total = label_total_amount[1]
+
 
     def clear_all_data(self):
         self.input_rubel_for_label = "0"
@@ -188,7 +192,7 @@ class Pages(Carousel):
             self.clear_all_data()
 
 
-    def get_parser_money(self, key_dict, rub=False, kop=False) ->str:
+    def get_parser_money(self, key_dict, rub=False, kop=False,tot_kop=False) ->str:
         val_for_parsing = self.file_dict[key_dict]
         if rub:
             rubel = val_for_parsing[0].split(".")[0]
@@ -196,6 +200,12 @@ class Pages(Carousel):
         if kop:
             kopeyka = val_for_parsing[0].split(".")[1]
             return kopeyka
+        if tot_kop:
+            kop_from_rubel = int(val_for_parsing[0].split(".")[0])*100
+            kopeyka = int(val_for_parsing[0].split(".")[1])
+            return kop_from_rubel+kopeyka
+
+
     def get_parser_comments(self,key):
         comments = self.file_dict[key][1]
         return comments.capitalize()
