@@ -175,7 +175,7 @@ class Pages(Carousel):
             comment = self.get_parser_comments(key)
             data = day,month,rubli,kopeyki,comment
             self.install_date_in_label_amount(data)
-            print("ключ есть")
+            # print("ключ есть")
         else:
             self.install_date_in_label_amount(data=False)
 
@@ -266,7 +266,7 @@ class Pages(Carousel):
         self.write_file()
         self.rubel_money.text = "0"
         self.kopeyka_money.text = "0"
-        print("New summ value",total_summ_value_in_dict)
+        # print("New summ value",total_summ_value_in_dict)
 
     def del_amount(self):
         key = self.get_key_for_dict()
@@ -346,16 +346,16 @@ class Pages(Carousel):
 
         self.file_dict[key] = value
         self.write_file()
-        print(self.file_dict,"Старый ключ с новым значением")
+        # print(self.file_dict,"Старый ключ с новым значением")
 
     @staticmethod
     def load_or_create_file_dict():
         try:
             with open("data_base.dat", 'rb') as file:
                 file_dict = pickle.load(file)
-                print("Открыт успешно", file_dict)
+                # print("Открыт успешно", file_dict)
         except (IOError, EOFError, FileNotFoundError):
-            print("Не открылся. Создался пустой")
+            # print("Не открылся. Создался пустой")
             with open(os.path.join(dir_name[0], "data_base.dat"), 'wb'):
                 pass
             file_dict = {}
@@ -374,7 +374,7 @@ class Pages(Carousel):
             key = self.get_key_for_dict()
             self.update_statistic_front_page(key)
             self.create_label_statistic_two_page()
-            print(self.file_dict)
+            # print(self.file_dict)
         except Exception as err:
             self.label_save_txt = "Ошибка: ",err
 
