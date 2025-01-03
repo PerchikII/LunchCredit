@@ -157,6 +157,11 @@ class Pages(Carousel):
 
 
     def clear_all_data(self):
+        lst_date = []
+        lst_date.append(self.day_day_spinner.text)
+        lst_date.append(self.month_month_spinner.text)
+        ################ label_month_lst
+        self.label_month_lst = lst_date
         self.input_rubel_for_label = "0"
         self.input_kopeyka_for_label = "0"
         self.comment_comment.text = ""
